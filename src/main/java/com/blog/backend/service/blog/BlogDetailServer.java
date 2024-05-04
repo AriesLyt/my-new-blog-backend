@@ -1,6 +1,7 @@
 package com.blog.backend.service.blog;
 
-import com.blog.backend.dao.blog.BlogDetailDao;
+import com.blog.backend.dto.blog.BlogDetailDto;
+import com.blog.backend.entity.blog.BlogDetailEntity;
 import com.blog.backend.repository.blog.BlogDetailRep;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,11 +19,11 @@ public class BlogDetailServer {
     }
 
 
-    public String addDetail() {
-        BlogDetailDao newDetail = new BlogDetailDao();
-        newDetail.setId(1);
-        newDetail.setTitle("Test");
-        newDetail.setContent("T");
+    public String addDetail(BlogDetailDto blog) {
+        BlogDetailEntity newDetail = new BlogDetailEntity();
+//        newDetail.setId(1);
+        newDetail.setTitle(blog.getTitle());
+        newDetail.setContent(blog.getContent());
         newDetail.setCreateTime(new Date().getTime());
         newDetail.setUpdateTime(new Date().getTime());
         blogDetailRep.insert(newDetail);

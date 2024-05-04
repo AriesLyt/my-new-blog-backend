@@ -1,7 +1,9 @@
-package com.blog.backend.controller;
+package com.blog.backend.controller.blog;
 
+import com.blog.backend.dto.blog.BlogDetailDto;
 import com.blog.backend.service.blog.BlogDetailServer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,7 +20,9 @@ public class BlogController {
 
 
     @RequestMapping("/detail/add")
-    public String blogAddDetail() {
-        return blogDetailServer.addDetail();
+    public String blogAddDetail(
+        @RequestBody BlogDetailDto blog
+    ) {
+        return blogDetailServer.addDetail(blog);
     }
 }
