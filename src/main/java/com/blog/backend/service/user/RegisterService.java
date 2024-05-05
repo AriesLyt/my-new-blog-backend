@@ -1,5 +1,7 @@
 package com.blog.backend.service.user;
 
+import com.blog.backend.utils.exception.CustomException;
+import com.blog.backend.utils.response.ApiResponse;
 import com.blog.backend.dto.user.RegisterDto;
 import com.blog.backend.entity.user.UserEntity;
 import com.blog.backend.repository.user.UserRep;
@@ -16,13 +18,13 @@ public class RegisterService {
         this.userRep = userRep;
     }
 
-    public String register (RegisterDto registerDto) {
+    public ApiResponse<Void> register (RegisterDto registerDto) {
         UserEntity userinfo = userRep.findByUsername(registerDto.getUsername());
-        if (userinfo != null) return "User already exist";
+        if (userinfo != null) throw new CustomException(ApiResponse.fail().getCode(), "User is exist");
         UserEntity user = new UserEntity();
         user.setUsername(registerDto.getUsername());
         user.setPassword(registerDto.getPassword());
         userRep.insert(user);
-        return "Register";
+        return ApiResponse.success();
     }
 }

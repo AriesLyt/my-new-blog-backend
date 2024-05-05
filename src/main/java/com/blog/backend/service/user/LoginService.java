@@ -1,10 +1,12 @@
 package com.blog.backend.service.user;
 
+import com.blog.backend.utils.exception.CustomException;
+import com.blog.backend.utils.response.ApiResponse;
+import com.blog.backend.utils.response.ResponseCode;
 import com.blog.backend.dto.user.LoginDto;
 import com.blog.backend.entity.user.UserEntity;
 import com.blog.backend.repository.user.UserRep;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 
@@ -18,14 +20,14 @@ public class LoginService {
         this.userRep = userRep;
     }
 
-    public String login (LoginDto loginDto) {
+    public ApiResponse<Void> login (LoginDto loginDto) {
         String username = loginDto.getUsername();
         String password = loginDto.getPassword();
         UserEntity userinfo = userRep.findByUsername(username);
-        if (userinfo == null) return "No user";
+        if (userinfo == null) throw new CustomException(ResponseCode.FAILURE.getCode(), "No User");
 
-        if (!userinfo.getPassword().equals(password)) return "Wrong password";
+        if (!userinfo.getPassword().equals(password))  throw new CustomException(ResponseCode.FAILURE.getCode(), "Wrong password");
 
-        return "Login successful";
+        return ApiResponse.success();
     }
 }
