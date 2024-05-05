@@ -33,6 +33,13 @@ public class UserController {
         this.registerService = registerService;
     }
 
+    private void beforeLoginAddCookie (HttpServletResponse response, String username) {
+        TokenBean tokenBean = new TokenBean();
+        tokenBean.setUsername(username);
+        Cookie cookie = new Cookie(CookieConfig.cookieName, JwtUtils.createJwt(tokenBean));
+        response.addCookie(cookie);
+    }
+
     @RequestMapping("/login")
     public ApiResponse<Void> login(
             @RequestBody LoginDto loginDto,
@@ -40,18 +47,20 @@ public class UserController {
     ) {
         ApiResponse<Void> res = loginService.login(loginDto);
         if (res.getCode() == ResponseCode.SUCCESS.getCode()) {
-            TokenBean tokenBean = new TokenBean();
-            tokenBean.setUsername(loginDto.getUsername());
-            Cookie cookie = new Cookie(CookieConfig.cookieName, JwtUtils.createJwt(tokenBean));
-            response.addCookie(cookie);
+            beforeLoginAddCookie(response, loginDto.getUsername());
         }
         return res;
     }
 
     @RequestMapping("/register")
     public ApiResponse<Void> Register(
-            @RequestBody RegisterDto registerDto
+            @RequestBody RegisterDto registerDto,
+            HttpServletResponse response
     ) {
-        return registerService.register(registerDto);
+        ApiResponse<Void> res = registerService.register(registerDto);
+        if (res.getCode() == ResponseCode.SUCCESS.getCode()) {
+            beforeLoginAddCookie(response, registerDto.getUsername());
+        }
+        return res;
     }
 }

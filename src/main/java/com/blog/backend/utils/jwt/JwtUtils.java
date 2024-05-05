@@ -13,7 +13,6 @@ import java.util.Date;
 public class JwtUtils {
 
     private final static String secretKey = "tNTaMC1B0Kzdl1q0LKJy7MooRbuwaebz+ariesBlogjwtKEy";
-//    private final static SecretKey Key = Keys.hmacShaKeyFor(Base64.getDecoder().decode(secretKey));
     private final static SecureDigestAlgorithm<SecretKey, SecretKey> Algorithm = Jwts.SIG.HS256;
 
     private final static String issuer = "Aries_author";
@@ -31,7 +30,6 @@ public class JwtUtils {
                 .expiration(expiration)
                 .signWith(Key, Algorithm)
                 .compact();
-        log.info(jwt);
         return jwt;
     }
 }
